@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Res } from '@nestjs/common';
 import { identity } from 'rxjs';
 import { CoffeesService } from './coffees.service';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 
 @Controller('coffees')
 export class CoffeesController {
@@ -31,10 +33,11 @@ export class CoffeesController {
     // }
 
     @Get(':id')
-    findOne(@Param('id') id: string){
+    findOne(@Param('id') id: number){
+        console.log(typeof id);
         // return `this action returns #[${params.id}] coffee`
         // return `this action returns #[${id}] coffee`
-        return this.coffeesService.findOne(id);
+        return this.coffeesService.findOne(''+id);
     }
 
     /*
@@ -47,16 +50,18 @@ export class CoffeesController {
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    create(@Body() body){
+    create(@Body() createCoffeeDto: CreateCoffeeDto){
+        console.log(createCoffeeDto instanceof CreateCoffeeDto);        
         // return body;
         // return 'Action creare coffee'
-        return this.coffeesService.create(body);
+        return this.coffeesService.create(createCoffeeDto);
+        // return createCoffeeDto;
     }
 
     @Patch('/:id')
-    update(@Param('id') id:string, @Body() body) {
+    update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto) {
         // return `this action update #[${id}] coffee`
-        return this.coffeesService.update(id, body);
+        return this.coffeesService.update(id, updateCoffeeDto);
     }
     
     @Delete('/:id')
