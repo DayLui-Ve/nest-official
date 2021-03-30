@@ -1,11 +1,14 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, Patch, Post, Query, Res } from '@nestjs/common';
 import { identity } from 'rxjs';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 
 @Controller('coffees')
 export class CoffeesController {
+
+    private readonly logger = new Logger(CoffeesController.name);
 
     constructor(
         private readonly coffeesService: CoffeesService
@@ -21,10 +24,12 @@ export class CoffeesController {
     */
 
     @Get()
-    findAll(@Query() queryPagination){
-        const { limit, offset } = queryPagination
+    findAll(@Query() queryPagination: PaginationQueryDto){
+        // const { limit, offset } = queryPagination
+        this.logger.log(JSON.stringify(queryPagination), "queryPagination");
+        // console.error("HOLA HOLA");
         // return `Action return all coffees: ${limit} | ${offset}`;
-        return this.coffeesService.findAll();
+        return this.coffeesService.findAll(queryPagination);
     }
 
     // @Get(':id')
@@ -61,6 +66,7 @@ export class CoffeesController {
     @Patch('/:id')
     update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto) {
         // return `this action update #[${id}] coffee`
+        console.log('update-start', { id, updateCoffeeDto })
         return this.coffeesService.update(id, updateCoffeeDto);
     }
     
