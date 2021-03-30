@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, Patch, Post, Query, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Logger, Param, Patch, Post, Query, Res } from '@nestjs/common';
 import { identity } from 'rxjs';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
+import { REQUEST } from '@nestjs/core';
+import { Request } from 'express';
 
 @Controller('coffees')
 export class CoffeesController {
@@ -11,9 +13,10 @@ export class CoffeesController {
     private readonly logger = new Logger(CoffeesController.name);
 
     constructor(
-        private readonly coffeesService: CoffeesService
+        private readonly coffeesService: CoffeesService,
+        @Inject(REQUEST) private readonly request: Request, // Para obtener informacion del request
     ) {
-
+        console.log("CoffeesService Created")
     }
 
     /*

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
 import { Coffee } from './entities/coffee.entity';
@@ -7,8 +7,12 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { Event } from '../events/entities/event.entity';
+import { COFFEE_BRANDS } from './coffees.constants';
 
-@Injectable()
+// @Injectable({ scope: Scope.TRANSIENT }) // Se construye tantas veces como importaciones haya en el constructor
+// @Injectable({ scope: Scope.DEFAULT }) // Se trabaja con singleton, solo se instacia una vez
+// @Injectable() // Por defecto singleton
+@Injectable({ scope: Scope.REQUEST }) // Se trabaja con singleton, solo se instacia una vez
 export class CoffeesService {
 
     constructor(
@@ -17,7 +21,10 @@ export class CoffeesService {
         @InjectRepository(Flavor)
         private readonly flavorRepository: Repository<Flavor>,
         private readonly connection: Connection,
-    ){}
+        @Inject(COFFEE_BRANDS) coffeeBrands:string[],
+    ){
+        console.log("CoffeesService initialize")
+    }
 
     findAll(paginationQueryDto: PaginationQueryDto) {
         const { limit, offset } = paginationQueryDto;

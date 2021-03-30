@@ -12,7 +12,7 @@ export class Coffee {
     @Column()
     name: string;
 
-    @Column()
+    @Column({ nullable: true })
     description: string
     
     @Column()
