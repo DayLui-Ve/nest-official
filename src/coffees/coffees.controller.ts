@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Logger, Param, Patch, Post, Query, Res, SetMetadata, UsePipes, ValidationPipe } from '@nestjs/common';
-import { identity } from 'rxjs';
+import { ApiForbiddenResponse, ApiTags } from "@nestjs/swagger";
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
@@ -12,6 +12,7 @@ import { Protocol } from 'src/common/decorators/protocol.decorator';
 
 // @UsePipes(ValidationPipe) // Cuando queremos aplicarlo solo en los controladores
 // @UsePipes(new ValidationPipe({options...})) // Cuando queremos especificar configuraciones especificas
+@ApiTags('Coffees')
 @Controller('coffees')
 export class CoffeesController {
   private readonly logger = new Logger(CoffeesController.name);
@@ -32,15 +33,19 @@ export class CoffeesController {
 
   // @UsePipes(ValidationPipe) // Cuando queremos usar solo en la funcion especifica
   // @SetMetadata('isPublic', true)
+  @ApiForbiddenResponse({ description: 'Forbidden' })
   @Public()
   @Get()
-  async findAll( @Protocol("https") protocol, @Query() queryPagination: PaginationQueryDto) {
+  async findAll(
+    @Protocol('https') protocol,
+    @Query() queryPagination: PaginationQueryDto,
+  ) {
     // const { limit, offset } = queryPagination
     // this.logger.log(JSON.stringify(queryPagination), 'queryPagination');
     // console.error("HOLA HOLA");
     // return `Action return all coffees: ${limit} | ${offset}`;
     // await new Promise(resolve => setTimeout(() => resolve, 5000));
-    console.log(`protocol`, protocol)
+    console.log(`protocol`, protocol);
     return this.coffeesService.findAll(queryPagination);
   }
 
