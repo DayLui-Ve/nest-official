@@ -8,11 +8,13 @@ import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS } from './coffees.constants';
+import { ConfigService, ConfigType } from '@nestjs/config';
+import coffeesConfig from './config/coffees.config';
 
 // @Injectable({ scope: Scope.TRANSIENT }) // Se construye tantas veces como importaciones haya en el constructor
 // @Injectable({ scope: Scope.DEFAULT }) // Se trabaja con singleton, solo se instacia una vez
-// @Injectable() // Por defecto singleton
-@Injectable({ scope: Scope.REQUEST }) // Se trabaja con singleton, solo se instacia una vez
+// @Injectable({ scope: Scope.REQUEST }) // Se trabaja con singleton, solo se instacia una vez
+@Injectable() // Por defecto singleton
 export class CoffeesService {
 
     constructor(
@@ -22,8 +24,23 @@ export class CoffeesService {
         private readonly flavorRepository: Repository<Flavor>,
         private readonly connection: Connection,
         @Inject(COFFEE_BRANDS) coffeeBrands:string[],
+        // private readonly configService: ConfigService,
+        @Inject(coffeesConfig.KEY)
+        private readonly coffeesConfiguration: ConfigType<typeof coffeesConfig>,
     ){
-        console.log("CoffeesService initialize")
+
+        // console.log("CoffeesService initialize")
+        // El segundo parametro es el valor por defecto si no se encuentra definido la variable de entorno
+        // const databaseHost = this.configService.get<string>("DATABASE_HOST", "localhost");
+        // Cuando usamos load
+        // const databaseHost = this.configService.get<string>("database.host", "localhost2");
+        // console.log('databaseHost:', databaseHost);
+        // Para usar configuraciones internas del módulo
+        // const coffeesConfig = this.configService.get("coffees");
+        // console.log('coffeesConfig', coffeesConfig);
+        // Para importar directamente el namespace deseado
+        console.log(coffeesConfiguration)
+        console.log('coffeesConfiguration.foo', coffeesConfiguration.foo)
     }
 
     findAll(paginationQueryDto: PaginationQueryDto) {
