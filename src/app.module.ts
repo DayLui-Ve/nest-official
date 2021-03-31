@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoffeesModule } from './coffees/coffees.module';
@@ -9,6 +9,8 @@ import { ConfigModule } from '@nestjs/config';
 // Con Joi se puede validar las variables de entorno esten configuradas
 import * as Joi from '@hapi/joi';
 import appConfig from './config/app.config';
+// import { APP_PIPE, APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core'; // Existen varios genericos para injectar
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -36,8 +38,16 @@ import appConfig from './config/app.config';
     CoffeesModule,
     CoffeeRatingModule,
     DatabaseModule,
+    CommonModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // Con esto se coloca de forma global
+    // {
+    //   provide: APP_PIPE,
+    //   useClass: ValidationPipe
+    // }
+  ],
 })
 export class AppModule {}
