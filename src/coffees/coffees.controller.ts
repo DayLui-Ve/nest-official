@@ -6,9 +6,9 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import { Public } from 'src/common/decorators/public.decorator';
+import { Public } from '../common/decorators/public.decorator';
 import { ParseIntPipe } from '../common/pipes/parse-int.pipe';
-import { Protocol } from 'src/common/decorators/protocol.decorator';
+import { Protocol } from '../common/decorators/protocol.decorator';
 
 // @UsePipes(ValidationPipe) // Cuando queremos aplicarlo solo en los controladores
 // @UsePipes(new ValidationPipe({options...})) // Cuando queremos especificar configuraciones especificas

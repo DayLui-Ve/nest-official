@@ -39,8 +39,8 @@ export class CoffeesService {
         // const coffeesConfig = this.configService.get("coffees");
         // console.log('coffeesConfig', coffeesConfig);
         // Para importar directamente el namespace deseado
-        console.log(coffeesConfiguration)
-        console.log('coffeesConfiguration.foo', coffeesConfiguration.foo)
+        // console.log(coffeesConfiguration)
+        // console.log('coffeesConfiguration.foo', coffeesConfiguration.foo)
     }
 
     findAll(paginationQueryDto: PaginationQueryDto) {

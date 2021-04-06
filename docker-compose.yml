@@ -13,6 +13,15 @@ services:
        PGDATA: /var/lib/postgresql/data/pgdata
     volumes: 
       - postgres_data:/var/lib/postgresql/data
+  test-db:
+    image:  postgres
+    restart: always 
+    ports:
+      - "5433:5432"
+    environment:
+       POSTGRES_PASSWORD: 123456
+       POSTGRES_DB: nestdb
+       POSTGRES_USER: postgres
 
 volumes: 
   postgres_data:
